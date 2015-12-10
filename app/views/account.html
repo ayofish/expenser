@@ -1,1 +1,8 @@
-<p>This is the account view.</p>
+<h1>Expenses</h1>
+<div class="list-group">
+    <a href="#/expense/{{expense.id}}" class="list-group-item" ng-repeat="expense in expenses">
+        <span class="badge">{{expense.amount}}</span>
+        <emphasis>{{expense.date}}</emphasis>
+        <p>{{expense.memo}}</p>
+    </a>
+</div>

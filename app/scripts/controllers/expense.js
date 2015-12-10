@@ -8,7 +8,7 @@
  * Controller of the expenserApp
  */
 angular.module('expenserApp')
-    .controller('ExpenseCtrl', ['$scope', 'expense', 'expenseCategory', '$routeParams', function($scope, expenseService, expenseCategory, $routeParams) {
+    .controller('ExpenseCtrl', ['$scope', 'expense', 'expenseCategory', '$routeParams', "$location",function($scope, expenseService, expenseCategory, $routeParams, $location) {
         $scope.id = $routeParams.id;
         expenseCategory.getAll().then(function(results) {
             var categories = [];
@@ -22,6 +22,7 @@ angular.module('expenserApp')
             expenseService.get($scope.id).then(function(result) {
                 if (result.rows.length > 0) {
                     $scope.expense = expenseService.formatExpenseObj(result.rows.item(0));
+                    $scope.expense.amount = parseFloat($scope.expense.amount);
                     $scope.$watch('categories', function() {
                         for (var i = 0; i < $scope.categories.length; i++) {
                             if ($scope.categories[i].id == $scope.expense.category) {
@@ -56,6 +57,7 @@ angular.module('expenserApp')
                     amount: expense.amount
                 });
             }
+            $location.path( "/accounts" );
 
         }
 
@@ -87,10 +89,7 @@ angular.module('expenserApp')
             return (mode === 'day' && (date.getDay() === 0 || date.getDay() === 6));
         };
 
-        $scope.toggleMin = function() {
-            $scope.minDate = $scope.minDate ? null : new Date();
-        };
-        $scope.toggleMin();
+        
 
         $scope.open = function($event) {
             $event.preventDefault();

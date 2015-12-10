@@ -41,26 +41,34 @@ angular.module('expenserApp')
         };
 
         this.get = function(id) {
-            return db.select('expense', {
-                'id': id
-            });
+            var res = []
+            if (angular.isDefined(id)) {
+                res = db.select('expense', {
+                    'id': id
+                });
+
+            } else {
+                res = db.selectAll('expense');
+            }
+            return res;
         };
-        this.formatExpenseObj = function(data){
-        	return {
-        		//convert to decimal again
-        		"amount": data.amount * 0.01,
-        		"memo": data.memo,
-        		"date": $filter('date')(new Date(data.date), 'dd-MMMM-yyyy'),
-        		"category": data.expense_category
-        	};
+        this.formatExpenseObj = function(data) {
+            return {
+                id: data.id,
+                //convert to decimal again
+                "amount": (data.amount * 0.01).toFixed(2),
+                "memo": data.memo,
+                "date": $filter('date')(new Date(data.date), 'dd-MMMM-yyyy'),
+                "category": data.expense_category
+            };
         };
 
-        this.del = function(id){
-        	if(angular.isDefined(id) && id != null && id != ''){
-        		return db.del('expense', {
-        			id: id
-        		});
-        	}
+        this.del = function(id) {
+            if (angular.isDefined(id) && id != null && id != '') {
+                return db.del('expense', {
+                    id: id
+                });
+            }
         }
 
     }]);
